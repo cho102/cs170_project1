@@ -124,8 +124,8 @@ def a_star_misplaced(a_star_prob):
     return 0;
 
 
-# problem = [[1,2,3],[4,5,6],[0, 7, 8]];
-problem = [[1,3,6],[5,0,7],[4,8,2]];
-goal = a_star_misplaced(problem);
+# probMan = [[1,2,3],[4,5,6],[0, 7, 8]];
+probMan = [[1,3,6],[5,0,7],[4,8,2]];
+goal = a_star_misplaced(probMan);
 print("\n\nend: ");
 print(goal);
