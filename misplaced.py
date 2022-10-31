@@ -55,18 +55,15 @@ def moveRight(prob, x, y):
         prob1[x][y+1] = 0;
         return prob1;
 
-def append_priority(og, checker, rng):
+def append_priority(og):
     #append children by priority
-    while checker:
-        max = checker[0];
-        for x in checker:
-            if misplacedTiles(x) > misplacedTiles(max):
-                max = x;
-        og.append(max);
-        checker.remove(max);
+    for i in range(len(og)):
+        for j in range(i+1, len(og)):
+            if misplacedTiles(og[i]) < misplacedTiles(og[j]):
+                # print("og["+ str(i) +"] = " + str(misplacedTiles(og[i])) + " < og["+ str(i) +"] = " + str(misplacedTiles(og[i])));
+                og[i], og[j] = og[j], og[i]
 
 def getChildren(prob_op, queue):
-    queue_check = []
     prob_cp=prob_op;
     curr_x = 0;
     curr_y = 0;
@@ -81,24 +78,23 @@ def getChildren(prob_op, queue):
     probUp = moveUp(prob_cp, curr_x, curr_y);
     if probUp!= -1: 
         legal_moves+=1;
-        queue_check.append(probUp);
+        queue.append(probUp);
 
     probDown = moveDown(prob_cp, curr_x, curr_y);
     if probDown != -1: 
         legal_moves+=1;
-        queue_check.append(probDown);
+        queue.append(probDown);
 
     probLeft = moveLeft(prob_cp, curr_x, curr_y);
     if probLeft!= -1: 
         legal_moves+=1;
-        queue_check.append(probLeft);
+        queue.append(probLeft);
 
     probRight = moveRight(prob_cp, curr_x, curr_y);
     if probRight!= -1: 
         legal_moves+=1;
-        queue_check.append(probRight);
-        
-    append_priority(queue, queue_check, legal_moves);
+        queue.append(probRight);
+    append_priority(queue);
     return 0;
 
 
@@ -111,8 +107,7 @@ def a_star_misplaced(a_star_prob):
     depth_count=0;
     while checker:
         if len(queue)==0: 
-            print("failed");
-            checker = 0;
+            return "failed"
         #get top of node (front of queue)
         topNode = queue.pop();
         print("depth_count: " + str(depth_count));
@@ -124,7 +119,7 @@ def a_star_misplaced(a_star_prob):
     return 0;
 
 
-problem = [[1,2,3],[5,0,6],[4,7,8]];
+problem = [[1,2,3],[4,5,6],[0, 7, 8]];
 goal = a_star_misplaced(problem);
 print("\n\nend: ");
 print(goal);
