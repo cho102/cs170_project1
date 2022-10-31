@@ -63,7 +63,7 @@ def append_priority(og):
                 # print("og["+ str(i) +"] = " + str(misplacedTiles(og[i])) + " < og["+ str(i) +"] = " + str(misplacedTiles(og[i])));
                 og[i], og[j] = og[j], og[i]
 
-def getChildren(prob_op, queue):
+def getChildren(prob_op, queue, visited):
     prob_cp=prob_op;
     curr_x = 0;
     curr_y = 0;
@@ -76,22 +76,22 @@ def getChildren(prob_op, queue):
                 break;
 
     probUp = moveUp(prob_cp, curr_x, curr_y);
-    if probUp!= -1: 
+    if probUp!= -1 and visited.count(probUp)==0: 
         legal_moves+=1;
         queue.append(probUp);
 
     probDown = moveDown(prob_cp, curr_x, curr_y);
-    if probDown != -1: 
+    if probDown != -1 and visited.count(probDown)==0: 
         legal_moves+=1;
         queue.append(probDown);
 
     probLeft = moveLeft(prob_cp, curr_x, curr_y);
-    if probLeft!= -1: 
+    if probLeft!= -1 and visited.count(probLeft)==0: 
         legal_moves+=1;
         queue.append(probLeft);
 
     probRight = moveRight(prob_cp, curr_x, curr_y);
-    if probRight!= -1: 
+    if probRight!= -1 and visited.count(probRight)==0: 
         legal_moves+=1;
         queue.append(probRight);
     append_priority(queue);
@@ -101,6 +101,7 @@ def getChildren(prob_op, queue):
 
 def a_star_misplaced(a_star_prob):
     #make a queue
+    visited = [];
     queue = [];
     queue.append(a_star_prob);
     checker = 1;
@@ -110,16 +111,21 @@ def a_star_misplaced(a_star_prob):
             return "failed"
         #get top of node (front of queue)
         topNode = queue.pop();
-        print("depth_count: " + str(depth_count));
-        print(topNode);
+        visited.append(topNode);
+        # print("depth_count: " + str(depth_count));
+        # print(topNode);
         #check if it is goal state
-        if misplacedTiles(topNode)==0: return topNode;
-        getChildren(topNode, queue);
+        if misplacedTiles(topNode)==0: 
+            # print("visited: ")
+            # print(visited)
+            return topNode;
+        getChildren(topNode, queue, visited);
         depth_count+=1;
     return 0;
 
 
-problem = [[1,2,3],[4,5,6],[0, 7, 8]];
+# problem = [[1,2,3],[4,5,6],[0, 7, 8]];
+problem = [[1,3,6],[5,0,7],[4,8,2]];
 goal = a_star_misplaced(problem);
 print("\n\nend: ");
 print(goal);
