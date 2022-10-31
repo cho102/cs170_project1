@@ -11,9 +11,9 @@ def misplacedTiles(prob):
     incorrect_pos = 0;
     for x in range(3):
         for y in range(3):
-            if (prob[x][y]!=correct[x][y]& prob[x][y]!=0):
+            if (prob[x][y]!=correct[x][y]):
                 incorrect_pos+=1;
-    return(incorrect_pos-1);
+    return(incorrect_pos);
 
 def moveUp(prob, x, y):
     if x==0:
