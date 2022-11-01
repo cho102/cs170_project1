@@ -13,6 +13,26 @@ def buildPuzzle():
     problem.append(0);
     return problem;
 
+def choosePuzzle(num):
+    problemList = [];
+    problem = [[[1,2,3],[4,5,6],[7,8,0]],0,0];
+    problemList.append(problem);
+    problem = [[[1,2,3],[4,5,6],[0,7,8]],0,0];
+    problemList.append(problem);
+    problem = [[[1,2,3],[5,0,6],[4,7,8]],0,0];
+    problemList.append(problem);
+    problem = [[[1,3,6],[5,0,2],[4,7,8]],0,0];
+    problemList.append(problem);
+    problem = [[[1,3,6],[5,0,7],[4,8,2]],0,0];
+    problemList.append(problem);
+    problem = [[[1,6,7],[5,0,3],[4,8,2]],0,0];
+    problemList.append(problem);
+    problem = [[[7,1,2],[4,8,5],[6,3,0]],0,0];
+    problemList.append(problem);
+    problem = [[[0,7,2],[4,6,1],[3,5,8]],0,0];
+    problemList.append(problem);
+    return problemList[num-1];
+
 def chooseSearch():
     print("Pick a search algorithm: ")
     check = 1;
@@ -219,19 +239,44 @@ def performSearch(prob, choice):
 
 
 def main():
-    # problem = buildPuzzle();
-    # problem = [[[1,3,6],[5,0,7],[4,8,2]],0,0];
-    problem = [[[1,2,3],[4,5,6],[0,7,8]],0,0];
-    search = chooseSearch();
+    choice = 1;
+    while choice:
+        print("(1) Build your own puzzle?\n(2) Generate existing puzzle\n(3) Exit");
+        val = int(input("Input: "));
+        if val in range (1,4):
+            if val==3:
+                choice=0;
+                return;
+            elif val==2:
+                check = 1;
+                while check:
+                    print("Pick a number between 1-7")
+                    val1 = int(input("Input: "));
+                    if val1 in range (1,8):
+                        problem = choosePuzzle(val1);
+                        check=0;
+                    else:
+                        print("Please enter a valid integer from 1-3!")
+            else:
+                problem = buildPuzzle();
+            
+            search = chooseSearch();
 
-    print("Starting Puzzle: ")
-    print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
-    print("\n\nExpanded Nodes: ")
-    goal = performSearch(problem, search);
-    print("\n\nEnding Puzzle: ")
-    print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
-    print("Solution Depth: " + str(goal[1]));
-    print("Max Queue Size: " + str(goal[4]));
-    print("Total Nodes Visited: " + str(goal[3]))
+            print("Starting Puzzle: ")
+            print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
+            print("\n\nExpanded Nodes: ")
+            goal = performSearch(problem, search);
+            print("\n\nEnding Puzzle: ")
+            print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
+            print("Solution Depth: " + str(goal[1]));
+            print("Max Queue Size: " + str(goal[4]));
+            print("Total Nodes Visited: " + str(goal[3])+ "\n\n")
+        else:
+            print("Please enter a valid integer from 1-3!")
+    
+
+
+    
+    
 
 main();
