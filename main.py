@@ -189,17 +189,20 @@ def performSearch(prob, choice):
         getChildren(topNode, queue, visited, choice);
 
 
-# problem = buildPuzzle();
-# problem = [[[1,3,6],[5,0,7],[4,8,2]],0,0];
-problem = [[[1,2,3],[4,5,6],[0,7,8]],0,0];
-search = chooseSearch();
+def main():
+    # problem = buildPuzzle();
+    # problem = [[[1,3,6],[5,0,7],[4,8,2]],0,0];
+    problem = [[[1,2,3],[4,5,6],[0,7,8]],0,0];
+    search = chooseSearch();
 
-print("Starting Puzzle: ")
-print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
-print("\n\nExpanded Nodes: ")
-goal = performSearch(problem, search);
-print("\n\nEnding Puzzle: ")
-print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
-print("Solution Depth: " + str(goal[1]));
-print("Max Queue Size: " + str(goal[4]));
-print("Total Nodes Visited: " + str(goal[3]))
+    print("Starting Puzzle: ")
+    print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
+    print("\n\nExpanded Nodes: ")
+    goal = performSearch(problem, search);
+    print("\n\nEnding Puzzle: ")
+    print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
+    print("Solution Depth: " + str(goal[1]));
+    print("Max Queue Size: " + str(goal[4]));
+    print("Total Nodes Visited: " + str(goal[3]))
+
+main();
