@@ -172,8 +172,7 @@ def performSearch(prob, choice):
         if len(queue)==0: return "failed";
         if max_q_size < len(queue): max_q_size = len(queue)
         topNode = queue.pop();
-        print("topNode");
-        print(topNode)
+        print(topNode[0])
         visited.append(topNode);
         
         if choice == 2: #For Misplaced
@@ -190,14 +189,16 @@ def performSearch(prob, choice):
 
 
 # problem = buildPuzzle();
-problem = [[[1,2,3],[4,0,6],[7,5,8]],0,0];
+# problem = [[[1,3,6],[5,0,7],[4,8,2]],0,0];
+problem = [[[1,2,3],[4,5,6],[0,7,8]],0,0];
 search = chooseSearch();
 
 print("Starting Puzzle: ")
 print(problem);
+print("\n\nExpanded Nodes: ")
 goal = performSearch(problem, search);
-print("Ending Puzzle: ")
+print("\n\nEnding Puzzle: ")
 print(goal)
-# print("Solution Depth: " + str(goal[1]));
-# print("Max Queue Size: " + str(goal[4]));
-# print("Total Nodes Visited: " + str(goal[3]))
+print("Solution Depth: " + str(goal[1]));
+print("Max Queue Size: " + str(goal[4]));
+print("Total Nodes Visited: " + str(goal[3]))
