@@ -134,7 +134,7 @@ def a_star_manhattan(man_prob):
 
 
 
-problem = [[[1,6,7],[5,0,3],[4,8,2]],0, 0];
+problem = [[[0,7,2],[4,6,1],[3,5,8]],0, 0];
 print("start: ");
 print(problem);
 goal = a_star_manhattan(problem);
