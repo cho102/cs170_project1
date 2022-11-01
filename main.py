@@ -1,3 +1,5 @@
+import time;
+
 correct =[[1,2,3],[4,5,6],[7,8,0]];
 #Input Functions
 def buildPuzzle():
@@ -237,7 +239,7 @@ def performSearch(prob, choice):
         #if not yet reached goal state, expand the node to get its children nodes
         getChildren(topNode, queue, visited, choice);
 
-
+#main function of the program
 def main():
     choice = 1;
     while choice:
@@ -259,24 +261,23 @@ def main():
                         print("Please enter a valid integer from 1-3!")
             else:
                 problem = buildPuzzle();
-            
             search = chooseSearch();
+            
 
             print("Starting Puzzle: ")
             print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
             print("\n\nExpanded Nodes: ")
+            start_time=time.time()
             goal = performSearch(problem, search);
+            end_time = time.time() - start_time
             print("\n\nEnding Puzzle: ")
             print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
             print("Solution Depth: " + str(goal[1]));
             print("Max Queue Size: " + str(goal[4]));
-            print("Total Nodes Visited: " + str(goal[3])+ "\n\n")
+            print("Total Nodes Visited: " + str(goal[3]))
+            print("Total time elapsed(in seconds): " + str(end_time)+ "\n\n")
         else:
             print("Please enter a valid integer from 1-3!")
-    
-
-
-    
     
 
 main();
