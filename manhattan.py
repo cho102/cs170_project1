@@ -1,65 +1,65 @@
 correct =[[1,2,3],[4,5,6],[7,8,0]];
 
 def makeCopy(prob):
-    new = [[[0,0,0],[0,0,0], [0,0,0]], 0];
+    new = [[[0,0,0],[0,0,0], [0,0,0]], 0, 0];
     for x in range(3):
         for y in range(3):
             new[0][x][y] = prob[0][x][y];
     new[1]=prob[1];
+    new[2]= 0;
     return new;
 
 def moveUp(prob, x, y):
     if x==0:
         return -1;
     else: 
-        print("u")
+        # print("u")
         prob1 = makeCopy(prob);
         val=prob1[0][x-1][y];
         prob1[0][x][y] = val;
         prob1[0][x-1][y] = 0;
         prob1[1]+=1;
-        prob1[1] +=calManhattan(prob1);
+        prob1[2] += calManhattan(prob1);
         return prob1;
 
 def moveDown(prob, x, y):
     if x == 2:
         return -1;
     else:
-        print("d")
+        # print("d")
         prob1 = makeCopy(prob);
         val=prob1[0][x+1][y];
         prob1[0][x][y] = val;
         prob1[0][x+1][y] = 0;
         prob1[1]+=1;
-        prob1[1] += calManhattan(prob1);
+        prob1[2] += calManhattan(prob1);
         return prob1;
 
 def moveLeft(prob, x, y):
     if y==0:
         return -1;
     else:
-        print("l")
+        # print("l")
         prob1 = makeCopy(prob);
         val=prob1[0][x][y-1];
         prob1[0][x][y] = val;
         prob1[0][x][y-1] = 0;
         prob1[1]+=1;
-        prob1[1] +=calManhattan(prob1);
+        prob1[2] +=calManhattan(prob1);
         return prob1;
 
 def moveRight(prob, x, y):
     if y==2:
         return -1;
     else:
-        print("r")
+        # print("r")
         prob1 = makeCopy(prob);
         val=prob1[0][x][y+1];
         prob1[0][x][y] = val;
         prob1[0][x][y+1] = 0;
         prob1[1]+=1;
-        prob1[1] +=calManhattan(prob1);
+        prob1[2] +=calManhattan(prob1);
         return prob1;
-
 
 def calManhattan(probMan):
     total_dist = 0;
@@ -76,7 +76,17 @@ def calManhattan(probMan):
                             total_dist += abs(k-n);
     return total_dist;
 
-def getChildren(prob_og, visited):
+def orderPriorityQueue(og):
+    for i in range(len(og)):
+        for j in range(i+1, len(og)):
+            if (og[i][1] + og[i][2]) < (og[j][1] + og[j][2]):
+                og[i], og[j] = og[j], og[i]           
+
+def checkGoal(node):
+    if node[0] == correct: return 1;
+    return 0;
+
+def getChildren(prob_og, queue, visited):
     #locate the location of 0
     prob_child = prob_og
     curr_x = 0;
@@ -104,14 +114,29 @@ def getChildren(prob_og, visited):
     if probRight!= -1 and visited.count(probRight)==0: 
         queue.append(probRight);
     
-    print(queue);
+    orderPriorityQueue(queue);
+
+def a_star_manhattan(man_prob):
+    queue =[];
+    visited = [];
+    queue.append(man_prob);
+    while 1:
+        if len(queue)==0: 
+            return "failed"
+        topNode = queue.pop();
+        if checkGoal(topNode): return topNode
+        visited.append(topNode);
+
+        getChildren(topNode, queue, visited);
+        
+    
+    return 0;
 
 
-queue =[];
-visited = [];
-problem = [[[1,2,0],[4,5,3],[7,8,6]],0];
-# print(problem[0])
-# print(problem[1])
-queue.append(problem);
-visited.append(problem);
-getChildren(problem, visited);
+
+problem = [[[1,6,7],[5,0,3],[4,8,2]],0, 0];
+print("start: ");
+print(problem);
+goal = a_star_manhattan(problem);
+print("\nend: ");
+print(goal);

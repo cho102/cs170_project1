@@ -97,8 +97,6 @@ def getChildren(prob_op, queue, visited):
     append_priority(queue);
     return 0;
 
-
-
 def a_star_misplaced(a_star_prob):
     #make a queue
     visited = [];
