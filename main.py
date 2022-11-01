@@ -155,16 +155,16 @@ def getChildren(prob_op, queue, visited, choice):
     #create the children nodes of the topNode
     probUp = moveUp(prob_child, curr_x, curr_y, choice);
     #check if node has already been visited or if node is an edge piece. If not, it will be appended to queue
-    if probUp!= -1 and visited.count(probUp)==0:
+    if probUp!= -1 and visited.count(probUp[0])==0:
         queue.append(probUp);
     probDown = moveDown(prob_child, curr_x, curr_y, choice);
-    if probDown != -1 and visited.count(probDown)==0: 
+    if probDown != -1 and visited.count(probDown[0])==0: 
         queue.append(probDown);
     probLeft = moveLeft(prob_child, curr_x, curr_y, choice);
-    if probLeft!= -1 and visited.count(probLeft)==0: 
+    if probLeft!= -1 and visited.count(probLeft[0])==0: 
         queue.append(probLeft);
     probRight = moveRight(prob_child, curr_x, curr_y, choice);
-    if probRight!= -1 and visited.count(probRight)==0: 
+    if probRight!= -1 and visited.count(probRight[0])==0: 
         queue.append(probRight);
     
     #order the queue
@@ -212,7 +212,7 @@ def performSearch(prob, choice):
     max_q_size = 0;
     while 1:
         #no solutions found
-        if len(queue)==0: return "failed";
+        if len(queue)==0: return 1;
         #see how big the queue got
         if max_q_size < len(queue): max_q_size = len(queue)
         #take top node which has highest priority/best f(n)
@@ -220,8 +220,7 @@ def performSearch(prob, choice):
         print("\n\ng(n)=" + str(topNode[1]) + ", h(n)=" + str(topNode[2]))
         print('\n'.join(' '.join('%2d' % x for x in l) for l in topNode[0]));
         #prevent repeated states since it is out of queue
-        visited.append(topNode);
-        
+        visited.append(topNode[0]);
         #checks if node is in goal state
         if choice == 2: #For Misplaced
             #so main() can print how many nodes have been visited and max queue size
@@ -252,7 +251,7 @@ def main():
             elif val==2:
                 check = 1;
                 while check:
-                    print("Pick a number between 1-7")
+                    print("Pick a number between 1-8")
                     val1 = int(input("Input: "));
                     if val1 in range (1,8):
                         problem = choosePuzzle(val1);
@@ -262,7 +261,9 @@ def main():
             else:
                 problem = buildPuzzle();
             search = chooseSearch();
-            
+            if (search==1): print("Uniform Cost Chosen")
+            elif (search==2): print("A* with Misplaced Tiles Chosen")
+            else : print("A* with Manhattan Distance Chosen")
 
             print("Starting Puzzle: ")
             print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
@@ -271,11 +272,13 @@ def main():
             goal = performSearch(problem, search);
             end_time = time.time() - start_time
             print("\n\nEnding Puzzle: ")
-            print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
-            print("Solution Depth: " + str(goal[1]));
-            print("Max Queue Size: " + str(goal[4]));
-            print("Total Nodes Visited: " + str(goal[3]))
-            print("Total time elapsed(in seconds): " + str(end_time)+ "\n\n")
+            if goal: print("Failed to find a Solution")
+            else:
+                print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
+                print("Solution Depth: " + str(goal[1]));
+                print("Max Queue Size: " + str(goal[4]));
+                print("Total Nodes Visited: " + str(goal[3]))
+                print("Total time elapsed(in seconds): " + str(end_time)+ "\n\n")
         else:
             print("Please enter a valid integer from 1-3!")
     
