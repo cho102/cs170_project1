@@ -1,14 +1,36 @@
 import time;
 
+#matrix of the correct board will be placed here to be compared #default 8-tile
 correct =[[1,2,3],[4,5,6],[7,8,0]];
+#the size of the board (ex:3x3,4x4,5x5) #default board is 3x3 for 8-tile puzzle
+board = 3;
 #Input Functions
 def buildPuzzle():
-    puzzle = [[],[],[]];
+    global board;
+    global correct;
+    correct = [];
+    puzzle=[];
+    wait = 1;
+    while wait:
+        print("How many tiles do you want in your puzzle? 8, 15, or 24?")
+        tiles = int(input("Input: "))
+        if tiles == 8 or tiles == 15 or tiles == 25:wait = 0;
+        else: print("Please enter valid number of tiles!")
+    if tiles == 15: board=4;
+    elif tiles == 24: board=5;
+    for i in range(board):
+        puzzle.append([]);
+        correct.append([]);
+
     print("Build your own 8-tile puzzle!\nEnter value(0-8) for:")
-    for i in range(3):
-        for j in range(3):
+    num = 1;
+    for i in range(board):
+        for j in range(board):
             val = int(input("Row " + str(i+1) + ", Column " +str(j+1) + ": "));
             puzzle[i].append(val)
+            correct[i].append(num)
+            num+=1;
+    correct[board-1][board-1] = 0;
     problem =[];
     problem.append(puzzle)
     problem.append(0);
@@ -39,7 +61,7 @@ def chooseSearch():
     print("Pick a search algorithm: ")
     check = 1;
     while check:
-        print("(1) Uniform Cost Search\n(2)A* with Misplaced Tile Heuristic\n(3)A* with Manhattan Distance Heuristic")
+        print("(1) Uniform Cost Search (2)A* with Misplaced Tile Heuristic (3)A* with Manhattan Distance Heuristic")
         val = int(input("Input: "));
         if val in range (1,4):
             check=0;
@@ -56,9 +78,11 @@ def checkGoal(node):
 
 #makes a copy of the node(prob) so that changes won't affect the original node
 def makeCopy(prob):
-    new = [[[0,0,0],[0,0,0], [0,0,0]], 0, 0];
-    for x in range(3):
-        for y in range(3):
+    if board==3: new = [[[0,0,0],[0,0,0], [0,0,0]], 0, 0];
+    elif board==4: new = [[[0,0,0,0],[0,0,0,0], [0,0,0,0], [0,0,0,0]], 0, 0];
+    else: new = [[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]], 0, 0];
+    for x in range(board):
+        for y in range(board):
             new[0][x][y] = prob[0][x][y];
     new[1]=prob[1];
     return new;
@@ -87,7 +111,7 @@ def moveUp(prob, x, y, choice):
         return prob1;
 
 def moveDown(prob, x, y, choice):
-    if x == 2:
+    if x == board-1:
         return -1;
     else:
         prob1 = makeCopy(prob);
@@ -117,7 +141,7 @@ def moveLeft(prob, x, y, choice):
         return prob1;
 
 def moveRight(prob, x, y, choice):
-    if y==2:
+    if y==board-1:
         return -1;
     else:
         prob1 = makeCopy(prob);
@@ -145,8 +169,8 @@ def getChildren(prob_op, queue, visited, choice):
     curr_x = 0;
     curr_y = 0;
     #find the position of 0 in the puzzle
-    for x in range(3):
-        for y in range(3):
+    for x in range(board):
+        for y in range(board):
             if (prob_child[0][x][y]==0):
                 curr_x = x;
                 curr_y = y;
@@ -175,8 +199,10 @@ def getChildren(prob_op, queue, visited, choice):
 def misplacedTiles(prob):
     incorrect_pos = 0;
     probNode = prob[0];
-    for x in range(3):
-        for y in range(3):
+    for x in range(board):
+        for y in range(board):
+            # print("prob: " + str(probNode[x][y]))
+            # print("c: " +str(correct[x][y]))
             #compare the probNode value to the correctNode value
             if (probNode[x][y]!=correct[x][y]):
                 incorrect_pos+=1;
@@ -185,8 +211,8 @@ def misplacedTiles(prob):
 #Manhattan Functions: checks the distance incorrect tiles are from the correct position (excluding 0)
 def calManhattan(probMan):
     total_dist = 0;
-    for m in range(3):
-        for n in range(3):
+    for m in range(board):
+        for n in range(board):
             #will not check manhattan distance if it is 0 or already in the right spot
             if correct[m][n] == probMan[0][m][n] or probMan[0][m][n]==0:
                 continue;
@@ -242,7 +268,7 @@ def performSearch(prob, choice):
 def main():
     choice = 1;
     while choice:
-        print("(1) Build your own puzzle?\n(2) Generate existing puzzle\n(3) Exit");
+        print("(1) Build your own n-tile puzzle? (2) Generate existing 8-tile puzzle (3) Exit");
         val = int(input("Input: "));
         if val in range (1,4):
             if val==3:
