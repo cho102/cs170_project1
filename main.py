@@ -212,12 +212,12 @@ def performSearch(prob, choice):
     max_q_size = 0;
     while 1:
         #no solutions found
-        if len(queue)==0: return 1;
+        if len(queue)==0: return 0;
         #see how big the queue got
         if max_q_size < len(queue): max_q_size = len(queue)
         #take top node which has highest priority/best f(n)
         topNode = queue.pop();
-        print("\n\ng(n)=" + str(topNode[1]) + ", h(n)=" + str(topNode[2]))
+        print("\ng(n)=" + str(topNode[1]) + ", h(n)=" + str(topNode[2]))
         print('\n'.join(' '.join('%2d' % x for x in l) for l in topNode[0]));
         #prevent repeated states since it is out of queue
         visited.append(topNode[0]);
@@ -267,12 +267,12 @@ def main():
 
             print("Starting Puzzle: ")
             print('\n'.join(' '.join('%2d' % x for x in l) for l in problem[0]));
-            print("\n\nExpanded Nodes: ")
+            print("\nExpanded Nodes: ")
             start_time=time.time()
             goal = performSearch(problem, search);
             end_time = time.time() - start_time
-            print("\n\nEnding Puzzle: ")
-            if goal: print("Failed to find a Solution")
+            print("\nEnding Puzzle: ")
+            if goal==0: print("Failed to find a Solution")
             else:
                 print('\n'.join(' '.join('%2d' % x for x in l) for l in goal[0]));
                 print("Solution Depth: " + str(goal[1]));
